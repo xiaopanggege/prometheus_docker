@@ -1,0 +1,37 @@
+{{ define "dingdog.title" }}
+{{- if gt (len .Alerts.Firing) 0 -}}{{ range .Alerts }}
+[警报]{{ .Labels.instance }}
+{{ end }}{{ end -}}
+{{- if gt (len .Alerts.Resolved) 0 -}}{{ range .Alerts }}
+[恢复]{{ .Labels.instance }}
+{{ end }}{{ end -}}
+{{- end }}
+
+{{ define "dingdog.text" }}
+{{- if gt (len .Alerts.Firing) 0 -}}
+{{ range .Alerts }}
+**[警报]**  
+名称：{{ .Labels.name }}  
+实例: {{ .Labels.instance }}  
+信息: {{ .Labels.alertname }}  
+详情: {{ .Annotations.summary }}  
+时间: {{ dateInZone "2006.01.02 15:04:05" (.StartsAt) "Asia/Shanghai" }}  
+{{ end }}
+{{/* *[Alertmanager]({{ .ExternalURL }}/#/alerts?receiver={{ .Receiver }})* */}}
+{{ end -}}
+
+{{- if gt (len .Alerts.Resolved) 0 -}}
+{{ range .Alerts }}
+**[恢复]**
+名称：{{ .Labels.name }}  
+实例: {{ .Labels.instance }}  
+信息: {{ .Labels.alertname }}  
+详情: {{ .Annotations.summary }}  
+故障时间: {{ dateInZone "2006.01.02 15:04:05" (.StartsAt) "Asia/Shanghai" }}  
+恢复时间: {{ dateInZone "2006.01.02 15:04:05" (.EndsAt) "Asia/Shanghai" }}  
+{{ end }}
+{{ end -}}
+{{- end }}
+
+{{ define "ding.link.title" }}{{ template "dingdog.title" . }}{{ end }}
+{{ define "ding.link.content" }}{{ template "dingdog.text" . }}{{ end }}

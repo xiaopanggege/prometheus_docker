@@ -1,0 +1,81 @@
+version: "3.5"
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    stop_signal: SIGINT
+    restart: always
+    user: root  # 运行用户改成root不然写物理映射盘的权限不够
+    ports:
+      - "9090:9090"
+    volumes:
+      # 挂载外部目录，用于迁移使用
+      - "./files/prometheus/conf:/etc/prometheus"
+      - "./files/prometheus/data:/prometheus"
+      # 时区以宿主机为准
+      - "/etc/localtime:/etc/localtime:ro"
+    command: 
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.enable-lifecycle"
+      - "--web.enable-admin-api"
+      - "--storage.tsdb.retention.time=60d"
+    networks:
+      pro_net:
+        ipv4_address: 172.18.20.10
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    stop_signal: SIGINT
+    user: root  # 运行用户改成root不然写物理映射盘的权限不够
+    restart: always
+    volumes:
+      # 挂载外部目录，用于迁移使用
+      - "./files/alertmanager/conf:/etc/alertmanager"
+      - "./files/alertmanager/data:/alertmanager"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+       - "9093:9093"
+    networks:
+      pro_net:
+        ipv4_address: 172.18.20.20
+  prometheus-webhook-dingtalk:
+    image: timonwong/prometheus-webhook-dingtalk
+    container_name: prometheus-webhook-dingtalk
+    stop_signal: SIGINT
+    restart: always
+    volumes:
+      - "./files/dingtalk/conf:/etc/prometheus-webhook-dingtalk"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "8060:8060"
+    command:
+      - "--web.enable-lifecycle"
+      - "--config.file=/etc/prometheus-webhook-dingtalk/config.yml"
+    networks:
+      pro_net:
+        ipv4_address: 172.18.20.40
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    stop_signal: SIGINT
+    restart: always
+    user: root  # 运行用户改成root不然写物理映射盘的权限不够
+    volumes:
+      # 映射ini和数据目录，ini是配置文件，通过页面点击做的修改不要直接改ini
+      - "./files/grafana/conf/grafana.ini:/etc/grafana/grafana.ini"
+      - "./files/grafana/data:/var/lib/grafana"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "3000:3000"
+    networks:
+      pro_net:
+        ipv4_address: 172.18.20.50
+networks:
+  pro_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.18.20.0/24"

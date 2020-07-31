@@ -1,0 +1,47 @@
+[
+  {
+    "targets": [
+      "192.168.168.247:9100"
+    ],
+    "labels": {
+      "name": "web01",
+      "type": "node-exporter"
+    }
+  },
+  {
+    "targets": [
+      "192.168.168.4:9100"
+    ],
+    "labels": {
+      "name": "web02",
+      "type": "node-exporter"
+    }
+  },
+  {
+    "targets": [
+      "192.168.168.12:9100"
+    ],
+    "labels": {
+      "name": "web03",
+      "type": "node-exporter"
+    }
+  },
+  {
+    "targets": [
+      "192.168.168.75:9100"
+    ],
+    "labels": {
+      "name": "python",
+      "type": "node-exporter"
+    }
+  },
+  {
+    "targets": [
+      "192.168.168.215:9100"
+    ],
+    "labels": {
+      "name": "yunwei",
+      "type": "node-exporter"
+    }
+  }
+]

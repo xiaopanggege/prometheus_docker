@@ -1,0 +1,167 @@
+groups:
+  - name: node-exporter-alert
+    rules:
+    - alert: 主机宕机了
+      expr: node_exporter:up == 0 
+      for: 1m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 宕机了"  
+        description: "instance: {{ $labels.instance }} \n- job: {{ $labels.job }} 关机了， 时间已经1分钟了。" 
+
+
+    - alert: CPU使用率高于80%
+      expr: node_exporter:cpu:total:percent > 80
+      for: 3m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} cpu 使用率为 {{ humanize $value }}%"  
+        description: ""    
+
+    - alert: CPU-iowait高于12%
+      expr: node_exporter:cpu:iowait:percent >= 12
+      for: 3m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} cpu iowait 为 {{ humanize $value }}%"  
+        description: ""    
+
+    - alert: CPU-1分钟负载过高
+      expr:  (node_exporter:load:load1) > (node_exporter:cpu:count) * 1.2
+      for: 3m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} load1 为 {{ $value }}"  
+        description: ""    
+
+    - alert: 内存使用率高于85%
+      expr: node_exporter:memory:used:percent > 85
+      for: 3m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 内存 使用率为 {{ humanize $value }}%"  
+        description: ""    
+
+    - alert: 磁盘使用率高于88%
+      expr: node_exporter:disk:used:percent > 88
+      for: 10m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 磁盘 使用率为 {{ humanize $value }}%"  
+        description: ""    
+
+    - alert: 磁盘IOPS-读高于3000次/秒
+      expr: node_exporter:disk:read:count:rate > 3000
+      for: 2m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} iops 读 为 {{ humanize $value }}次/秒"  
+        description: ""    
+
+    - alert: 磁盘IOPS-写高于3000次/秒
+      expr: node_exporter:disk:write:count:rate > 3000
+      for: 2m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} iops 写 为 {{ humanize $value }}次/秒"  
+        description: ""    
+
+    - alert: 磁盘读取速率高于50MB/s
+      expr: node_exporter:disk:read:mb:rate > 50 
+      for: 2m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 读取速率 为 {{ humanize $value }}MB/s"  
+        description: ""    
+
+    - alert: 磁盘写入速率高于50MB/s
+      expr: node_exporter:disk:write:mb:rate > 50
+      for: 2m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 写入速率 为 {{ humanize $value }}MB/s"  
+        description: ""    
+
+    - alert: 打开文件描述符高于80%
+      expr: node_exporter:filefd_allocated:percent > 80
+      for: 10m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 打开文件描述符数为 {{ humanize $value }}个"  
+        description: ""    
+
+    - alert: 网卡包流入的错误率高于4个/秒
+      expr: node_exporter:network:netin:error:rate > 4
+      for: 1m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 网卡包流入的错误速率 为 {{ humanize $value }}个/秒"  
+        description: ""    
+        
+    - alert: 网卡包流入的量高于35000个/秒
+      expr: node_exporter:network:netin:packet:rate > 35000
+      for: 1m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 网卡包流入量 为 {{ humanize $value }}个/秒"  
+        description: ""    
+
+    - alert: 网卡包流出的量高于35000个/秒
+      expr: node_exporter:network:netout:packet:rate > 35000
+      for: 1m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 网卡包流出量 为 {{ humanize $value }}个/秒"  
+        description: ""    
+
+    - alert: 网卡流入速率高于70M/秒
+      expr: node_exporter:network:netin:bit:rate/1024/1024 > 70
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "实例 {{ $labels.instance }} 网卡流入速率 为 {{ humanize $value }}M/秒"  
+        description: ""
+
+    - alert: 网卡流出速率高于70M/秒
+      expr: node_exporter:network:netout:bit:rate/1024/1024 > 70
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "实例 {{ $labels.instance }} 网卡流出速率 为 {{ humanize $value }}M/秒"
+        description: ""
+    
+    # 这个监控项有问题，监控的tcp状态太多了导致数值非常大
+    #- alert: TCP连接数量高于10000个
+    #  expr: node_exporter:network:tcp:total:count > 10000
+    #  for: 1m
+    #  labels: 
+    #    severity: warning
+    #  annotations: 
+    #    summary: "实例 {{ $labels.instance }} tcp连接数量 为 {{ $value }}个"  
+    #    description: ""    
+    #    value: "{{ $value }}"
+
+    - alert: 僵尸进程数量高于10个
+      expr: node_exporter:process:zoom:total:count > 10
+      for: 10m
+      labels: 
+        severity: warning
+      annotations: 
+        summary: "实例 {{ $labels.instance }} 僵尸进程数量 为 {{ $value }}个"  
+        description: ""    

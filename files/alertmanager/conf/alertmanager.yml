@@ -1,0 +1,29 @@
+global:
+  smtp_smarthost: 'smtp.139.com:25'       # smtp地址
+  smtp_from: '15005087050@139.com'                # 谁发邮件
+  smtp_auth_username: '15005087050@139.com'       # 邮箱用户
+  smtp_auth_password: ''                   # 邮箱密码
+  smtp_require_tls: false
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname']
+  group_wait: 20s
+  group_interval: 2m
+  repeat_interval: 1h
+  receiver: 'mail'
+
+receivers:
+  - name: 'mail'
+    #email_configs:
+    #- to: 'xtwqzxt@163.com'
+    #  send_resolved: true
+    webhook_configs:
+    - url: 'http://192.168.168.215:8060/dingtalk/webhook1/send'
+      send_resolved: true
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
