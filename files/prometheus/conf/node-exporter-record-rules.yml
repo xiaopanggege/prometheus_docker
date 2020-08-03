@@ -15,21 +15,21 @@ groups:
         job: "node-exporter"
 ##############################################################################################
 #                              cpu                                                           #
-    - expr: (1 - avg by (environment,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[5m])))  * 100 
+    - expr: (1 - avg by (jkname,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[5m])))  * 100 
       record: node_exporter:cpu:total:percent
       labels: 
         desc: "节点的cpu总消耗百分比"
         unit: "%"
         job: "node-exporter"
 
-    - expr: (avg by (environment,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[5m])))  * 100 
+    - expr: (avg by (jkname,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[5m])))  * 100 
       record: node_exporter:cpu:idle:percent
       labels: 
         desc: "节点的cpu idle百分比"
         unit: "%"
         job: "node-exporter"
 
-    - expr: (avg by (environment,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="iowait"}[5m])))  * 100 
+    - expr: (avg by (jkname,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="iowait"}[5m])))  * 100 
       record: node_exporter:cpu:iowait:percent
       labels: 
         desc: "节点的cpu iowait百分比"
@@ -37,21 +37,21 @@ groups:
         job: "node-exporter"
 
 
-    - expr: (avg by (environment,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="system"}[5m])))  * 100 
+    - expr: (avg by (jkname,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="system"}[5m])))  * 100 
       record: node_exporter:cpu:system:percent
       labels: 
         desc: "节点的cpu system百分比"
         unit: "%"
         job: "node-exporter"
 
-    - expr: (avg by (environment,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="user"}[5m])))  * 100 
+    - expr: (avg by (jkname,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="user"}[5m])))  * 100 
       record: node_exporter:cpu:user:percent
       labels: 
         desc: "节点的cpu user百分比"
         unit: "%"
         job: "node-exporter"
 
-    - expr: (avg by (environment,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode=~"softirq|nice|irq|steal"}[5m])))  * 100 
+    - expr: (avg by (jkname,instance) (irate(node_cpu_seconds_total{job="node-exporter",mode=~"softirq|nice|irq|steal"}[5m])))  * 100 
       record: node_exporter:cpu:other:percent
       labels: 
         desc: "节点的cpu 其他的百分比"
@@ -210,42 +210,42 @@ groups:
 
 #############################################################################################
 #                                network                                                    #
-    - expr: avg by (environment,instance,device) (irate(node_network_receive_bytes_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
+    - expr: avg by (jkname,instance,device) (irate(node_network_receive_bytes_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
       record: node_exporter:network:netin:bit:rate
       labels: 
         desc: "节点网卡eth0每秒接收的比特数"
         unit: "bit/s"
         job: "node-exporter"
 
-    - expr: avg by (environment,instance,device) (irate(node_network_transmit_bytes_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
+    - expr: avg by (jkname,instance,device) (irate(node_network_transmit_bytes_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
       record: node_exporter:network:netout:bit:rate
       labels: 
         desc: "节点网卡eth0每秒发送的比特数"
         unit: "bit/s"
         job: "node-exporter"
 
-    - expr: avg by (environment,instance,device) (irate(node_network_receive_packets_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
+    - expr: avg by (jkname,instance,device) (irate(node_network_receive_packets_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
       record: node_exporter:network:netin:packet:rate
       labels: 
         desc: "节点网卡每秒接收的数据包个数"
         unit: "个/秒"
         job: "node-exporter"
 
-    - expr: avg by (environment,instance,device) (irate(node_network_transmit_packets_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
+    - expr: avg by (jkname,instance,device) (irate(node_network_transmit_packets_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
       record: node_exporter:network:netout:packet:rate
       labels: 
         desc: "节点网卡发送的数据包个数"
         unit: "个/秒"
         job: "node-exporter"
 
-    - expr: avg by (environment,instance,device) (irate(node_network_receive_errs_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
+    - expr: avg by (jkname,instance,device) (irate(node_network_receive_errs_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
       record: node_exporter:network:netin:error:rate
       labels: 
         desc: "节点设备驱动器检测到的接收错误包的数量"
         unit: "个/秒"
         job: "node-exporter"
 
-    - expr: avg by (environment,instance,device) (irate(node_network_transmit_errs_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
+    - expr: avg by (jkname,instance,device) (irate(node_network_transmit_errs_total{device=~"eth0|eth1|ens33|ens37"}[1m]))
       record: node_exporter:network:netout:error:rate
       labels: 
         desc: "节点设备驱动器检测到的发送错误包的数量"
@@ -266,7 +266,7 @@ groups:
         unit: "个"
         job: "node-exporter"
 
-    - expr: sum by (environment,instance) (node_tcp_connection_states{job="node-exporter"})
+    - expr: sum by (jkname,instance) (node_tcp_connection_states{job="node-exporter"})
       record: node_exporter:network:tcp:total:count
       labels: 
         desc: "节点tcp连接总数"

@@ -4,7 +4,7 @@
       "192.168.168.247:9100"
     ],
     "labels": {
-      "name": "web01",
+      "jkname": "web01",
       "type": "node-exporter"
     }
   },
@@ -13,7 +13,7 @@
       "192.168.168.4:9100"
     ],
     "labels": {
-      "name": "web02",
+      "jkname": "web02",
       "type": "node-exporter"
     }
   },
@@ -22,7 +22,7 @@
       "192.168.168.12:9100"
     ],
     "labels": {
-      "name": "web03",
+      "jkname": "web03",
       "type": "node-exporter"
     }
   },
@@ -31,7 +31,7 @@
       "192.168.168.75:9100"
     ],
     "labels": {
-      "name": "python",
+      "jkname": "python",
       "type": "node-exporter"
     }
   },
@@ -40,7 +40,7 @@
       "192.168.168.215:9100"
     ],
     "labels": {
-      "name": "yunwei",
+      "jkname": "yunwei",
       "type": "node-exporter"
     }
   }

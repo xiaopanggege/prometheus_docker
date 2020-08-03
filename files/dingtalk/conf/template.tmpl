@@ -11,24 +11,26 @@
 {{- if gt (len .Alerts.Firing) 0 -}}
 {{ range .Alerts }}
 **[警报]**  
-名称：{{ .Labels.name }}  
+名称：{{ .Labels.jkname }}  
 实例: {{ .Labels.instance }}  
 信息: {{ .Labels.alertname }}  
 详情: {{ .Annotations.summary }}  
 时间: {{ dateInZone "2006.01.02 15:04:05" (.StartsAt) "Asia/Shanghai" }}  
+&nbsp;
 {{ end }}
 {{/* *[Alertmanager]({{ .ExternalURL }}/#/alerts?receiver={{ .Receiver }})* */}}
 {{ end -}}
 
 {{- if gt (len .Alerts.Resolved) 0 -}}
 {{ range .Alerts }}
-**[恢复]**
-名称：{{ .Labels.name }}  
+**[恢复]**  
+名称：{{ .Labels.jkname }}  
 实例: {{ .Labels.instance }}  
 信息: {{ .Labels.alertname }}  
 详情: {{ .Annotations.summary }}  
 故障时间: {{ dateInZone "2006.01.02 15:04:05" (.StartsAt) "Asia/Shanghai" }}  
 恢复时间: {{ dateInZone "2006.01.02 15:04:05" (.EndsAt) "Asia/Shanghai" }}  
+&nbsp;
 {{ end }}
 {{ end -}}
 {{- end }}
